@@ -3,6 +3,7 @@ import { Marker, Popup } from "react-leaflet"
 import markerIconPng from "leaflet/dist/images/marker-icon.png"
 import { Icon } from "leaflet"
 import { useNavigate } from 'react-router';
+import classes from "./draggable.module.css";
 
 
 function DraggableMarker({ draggable, position, popUp, handleSetPosition, type, logo, name }) {
@@ -37,10 +38,13 @@ function DraggableMarker({ draggable, position, popUp, handleSetPosition, type, 
             ref={markerRef}>
             {popUp &&
                 <Popup minWidth={90} >
-                    <div >
-                        {name}
-                        <button onClick={() => navigate("/add", { state: { type, logo, name, position } })}>edit</button>
-
+                    <div className={classes.mainDraggable}  >
+                        <h3>Location Details</h3>
+                        <p>{name}</p>
+                        <div className={classes.buttonDraggable}>
+                        <button className={classes.close}>close</button>
+                        <button className={classes.edit} onClick={() => navigate(`edit/${name}`)}>edit</button>
+                        </div>
                     </div>
                 </Popup>}
         </Marker>

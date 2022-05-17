@@ -1,10 +1,12 @@
-import { MapContainer, TileLayer } from "react-leaflet";
-import DraggableMarker from '../components/DraggableMarker'
-import { useEffect, useState } from 'react';
+import { useState, useMemo } from 'react';
+import { MapContainer, TileLayer, Marker } from "react-leaflet";
 import { useContext } from 'react';
 import { MainContext } from '../context/Provider';
-import { useLocation, useNavigate } from 'react-router';
+import { useNavigate } from 'react-router';
 import { useRef } from 'react';
+import markerIconPng from "leaflet/dist/images/marker-icon.png"
+import { Icon } from "leaflet"
+import classes from "./pages.module.css";
 
 const center = {
     lat: 35.69,
@@ -12,90 +14,90 @@ const center = {
 }
 
 const Add = () => {
-    const { state } = useLocation()
-    const form = useRef({
-        position: state?.position ?? center,
-        name: state?.name ?? "",
-        type: state?.type ?? "",
-        logo: state?.logo ?? null
-    })
-
-
-
+    const markerRef = useRef(null)
     const { locations, setLocations } = useContext(MainContext)
+
+    const [formData, setFormData] = useState({
+        position: center,
+        name: "",
+        type: "",
+        logo: "",
+    });
+
     const naviage = useNavigate()
 
-    const handleSetPosition = (position) => {
-        console.log(form.current);
-        form.current = {
-            ...form.current,
-            position
-        }
-    }
+    const eventHandlers = useMemo(
+        () => ({
+            dragend() {
+                const marker = markerRef.current
+                if (marker != null) {
+                    setFormData((formData) => ({ ...formData, position: marker.getLatLng() }))
+                }
+            },
+        }),
+        [],
+    )
 
-
-    const handleChange = (e) => {
-        if (e.target.type === "file") {
-            form.current = {
-                ...form.current,
-                [e.target.name]: e.target.files[0]
-            }
-        } else {
-            form.current = {
-                ...form.current,
-                [e.target.name]: e.target.value
-            }
-        }
-    }
-
-
-    const handleSubmit = (e) => {
+    const submitForm = (e) => {
         e.preventDefault()
-        let copy = [...locations]
-
-        if (state) {
-            let location = copy.find(item => item.name === state.name)
-            location.name = form.current.name
-            location.type = form.current.type
-            location.logo = state.logo
-            location.position = form.current.position
-            console.log(copy);
-            setLocations(copy)
-        } else {
-            copy.push(form.current)
-            setLocations(copy)
-            console.log(copy);
-
-        }
-        naviage("/", { replace: true, state: undefined })
-
+        setLocations(oldLocations => [...oldLocations, formData]);
+        console.log("locations", locations)
+        naviage("/")
     }
 
     return (
-        <div >
-            <form onChange={handleChange} onSubmit={handleSubmit}>
-                <label>Location Name:</label>
-                <input name="name" defaultValue={state?.name}></input><br />
-                <label>Location on Map:</label>
-                <div style={{ width: 700, height: 700, overflow: "hidden" }}>
-                    <MapContainer center={center} zoom={13} scrollWheelZoom={false} style={{ height: 700 }}>
-                        <DraggableMarker draggable={true} position={center} popUp={false} handleSetPosition={handleSetPosition} />
-                        <TileLayer
-                            attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-                            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-                        />
-                    </MapContainer>
+        <div className={classes.mainContainer}>
+            <form onSubmit={submitForm} className={classes.formContainer}>
+                <div className={classes.formGroups}>
+                    <h3>Share Location</h3>
+                    <div className={classes.formGroup}>
+                        <label>Location Name:</label>
+                        <input className={classes.input} name="name" value={formData.name} onChange={(e) => setFormData((formData) => ({ ...formData, name: e.target.value }))}></input>
+                    </div>
+
+                    <div className={classes.formGroup}>
+                        <label>Location on Map:</label>
+                        <div className={classes.mapContainer} style={{ height: 200 }}>
+                            <MapContainer center={center} zoom={13} scrollWheelZoom={false} style={{ height: 200 }}>
+                                <Marker
+                                    draggable={true}
+                                    eventHandlers={eventHandlers}
+                                    position={formData.position}
+                                    icon={new Icon({ iconUrl: markerIconPng, iconSize: [25, 41], iconAnchor: [12, 41] })}
+                                    ref={markerRef}>
+                                </Marker>
+                                <TileLayer
+                                    attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                                    url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                                />
+                            </MapContainer>
+                        </div>
+                    </div>
+
+                    <div className={classes.formGroup}>
+
+                        <label>Location Type:</label>
+                        <select className={classes.select} name="type" value={formData.type} onChange={(e) => setFormData((formData) => ({ ...formData, type: e.target.value }))}>
+                            <option value={"Business"}>Business</option>
+                            <option value={"Home"}>Home</option>
+                            <option value={"Shop"}>Shop</option>
+                        </select>
+                    </div>
+
+                    <div className={classes.formGroup}>
+                        <label>Logo</label>
+                        <label className={classes.upload}>
+                            <span>Upload</span>
+                            <input type={"file"} name="logo" onChange={(e) => setFormData((formData) => ({ ...formData, logo: e.target.files[0] }))} />
+                        </label>
+                    </div>
                 </div>
-                <label>Location Type:</label>
-                <select name="type" defaultValue={state?.type}>
-                    <option value={"Business"}>Business</option>
-                    <option value={"Home"}>Home</option>
-                    <option value={"Shop"}>Shop</option>
-                </select><br />
-                <label>Logo</label>
-                <input type={"file"} name="logo" /><br />
-                <button>Save</button>
-                <button onClick={() => naviage("/", { replace: true, state: undefined })}>Cancel</button>
+
+
+                <div className={classes.actions}>
+                    <button className={classes.cancel} onClick={() => naviage("/", { replace: true, state: undefined })}>Cancel</button>
+                    <button className={classes.submit}>Save</button>
+                </div>
             </form>
         </div>
     );

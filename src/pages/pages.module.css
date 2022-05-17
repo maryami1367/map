@@ -1,0 +1,148 @@
+.mainContainer {
+    max-width: 500px;
+    margin: auto;
+    margin-top: 25px;   
+}
+
+.formContainer {
+    width: 100%;
+}
+
+.formGroups {
+    border-radius: 8px;
+    border: 2px solid rgb(24, 66, 252);
+}
+
+.formGroups h3 {
+    padding: 8px;
+    background-color: rgb(24, 66, 252);
+    color: white;
+    margin: 0!important;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+}
+
+.formGroup {
+    display: grid;
+    grid-template-columns: 40% 60%;
+    padding: 8px;
+    width: 95%;
+    margin: auto;
+}
+
+.mapContainer {
+    overflow: "hidden";
+    border: 1px solid black;
+}
+
+.actions {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 10px;
+}
+
+.actions button {
+    border-radius: 4px;
+    color: white;
+    border: none;
+    padding: 6px;
+    width: 70px;
+    cursor: pointer;
+    opacity: 0.9;
+    transition: 0.2s ease-in-out;
+    font-weight: 500;
+}
+
+.actions button:hover {
+    opacity: 1;
+}
+
+.input {
+    font-size: 20px;
+    padding: 5px;
+}
+
+
+.submit {
+    margin-left: 10px;
+    background-color: rgb(88, 157, 235);
+}
+
+.cancel {
+    background-color: rgb(95, 95, 95);
+}
+
+.mainPage {
+    position: relative;
+}
+
+.mainMap {
+    border: 3px solid black;
+    max-height: 100vh;
+}
+
+.addLocation {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    border-radius: 4px;
+    color: white;
+    border: none;
+    padding: 6px 14px;
+    cursor: pointer;
+    opacity: 0.9;
+    transition: 0.2s ease-in-out;
+    font-weight: 500;
+    background-color: rgb(4, 173, 55);
+    z-index: 999;
+}
+
+.addLocation:hover {
+    opacity: 1;
+}
+
+.upload input {
+    overflow: hidden;
+    width: 0;
+    height: 0;
+}
+
+.upload {
+    background-image: url('/public/images/upload.png');
+    background-color: rgba(72, 198, 248, 0.74);
+    height: 120px;
+    background-repeat: no-repeat;
+    background-size: 70px 70px;
+    background-position: bottom 10px center;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    border-radius: 8px;
+    border: 2px solid rgb(24, 66, 252);
+}
+
+.upload input {
+    overflow: hidden;
+    width: 0;
+    height: 0;
+}
+.select {
+    font-size: 20px;
+    padding: 5px;
+    border-radius: 5px;
+    background-image: url('/public/images/drop-down.png');
+    -moz-appearance: none;
+    -webkit-appearance: none;
+    background-repeat: no-repeat, repeat;
+    background-position: right -6px top 50%, 0 0;
+    background-size: 43px 43px
+}
+.upload span {
+    background-color: rgb(24, 66, 252);
+    width: calc(100% - 10px);
+    padding: 5px;
+    text-align: center;
+    color: white;
+    font-weight: 700;
+}
+

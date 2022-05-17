@@ -1,8 +1,9 @@
-import { useContext, useState } from "react";
+import { useContext} from "react";
 import { MainContext } from './../context/Provider';
 import { MapContainer, TileLayer } from "react-leaflet";
 import DraggableMarker from '../components/DraggableMarker'
 import { useNavigate } from "react-router";
+import classes from "./pages.module.css";
 
 const center = {
     lat: 35.69,
@@ -11,14 +12,14 @@ const center = {
 
 const Map = () => {
 
-    const { locations, showDialog } = useContext(MainContext)
+    const { locations} = useContext(MainContext)
     const naviage = useNavigate()
 
     return (
-        <div >
-            <button onClick={() => naviage("/add", { state: undefined })}>Save Location</button>
-            <MapContainer center={center} zoom={13} scrollWheelZoom={true} style={{ height: 1024 }}>
-                {locations.map((item, key) =>
+        <div className={classes.mainPage}>
+            <button className={classes.addLocation} onClick={() => naviage("/add", { state: undefined })}>Add Location</button>
+            <MapContainer className={classes.mainMap} center={center} zoom={13} scrollWheelZoom={true} style={{ height: "99.5vh" }}>
+               {locations.map((item, key) =>
                     <DraggableMarker
                         key={key}
                         draggable={false}

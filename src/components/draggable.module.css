@@ -1,0 +1,28 @@
+.mainDraggable h3 {
+    padding: 8px;
+    background-color:  rgb(168, 245, 191);
+    color:rgb(101, 179, 125); ;
+    margin: 0!important;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+}
+
+
+.edit{
+    padding: 5px;
+    margin: 5px;
+    border-radius: 3px;
+    border: none ;
+    background-color: rgb(88, 157, 235);
+    cursor: pointer;
+    
+}
+.close{
+    padding: 5px;
+    margin: 5px;
+    border-radius: 3px;
+    border: none ;
+    background-color: rgb(219, 149, 102);
+    cursor: pointer;
+    
+}
